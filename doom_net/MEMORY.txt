@@ -1,0 +1,80 @@
+UniDoom NET v0.2 — measured allocation
+=====================================
+
+MZF including 128-byte header: 27420 bytes.
+Sharp loaded image: 27292 bytes, 3000h..9A9Bh.
+Unused before A000h: 1380 bytes.
+Z80 host/network/music/SFX/skins/alignment: 8962 bytes.
+Embedded ARM payload: 18330 bytes.
+
+New marine graphics use no additional ARM artwork allocation. Three
+32x32 4bpp player poses (1536 bytes) and the three original drone frames
+(1536 bytes) are stored in Sharp RAM. At match start, the Z80 overwrites
+the existing ARM sprite slots 0/3/4. On leaving, it restores the drones.
+The generated upload addresses follow the current linker symbol for art.
+This retains the 32-column shaded texture cache and the 64 KB ARM limit.
+
+The image extends into ordinary Sharp RAM below A000h. The host disables
+the CPU VRAM window before reading this payload. Zero Sharp VRAM reads or
+writes occur. The MZF loader must load the image into RAM as for an
+ordinary MZ program. Host code and IRQ vector remain below 8000h; the
+upper image is embedded ARM code/constants. Music history is unchanged
+at A000h..A7FFh (2048 bytes) and the stack top remains D000h.
+
+ARM payload: 18330 bytes, plus alignment to static state.
+ARM BSS/static state: 14384 bytes.
+ARM code/constants/state: 32720 bytes.
+Static end: 20027FD0h; backbuffer starts 20028000h.
+Free gap before backbuffer: 48 bytes.
+Backbuffer: 32768 bytes at 20028000h..2002FFFFh.
+Total ARM user allocation used: 65488 / 65536 bytes.
+The native call stack keeps its original 20010000h top outside this window.
+No surrounding firmware RAM or extra CCM is borrowed.
+
+Major state components:
+  Decoded artwork                              7168 bytes
+  Current map                                   768 bytes
+  Navigation distances                          768 bytes
+  Shared BFS queue / renderer scratch           1856 bytes
+  Four per-player states (36 bytes each)          144 bytes
+  Column indices                                 160 bytes
+  Partial-door UV values                          320 bytes
+  Particle states                                320 bytes
+  Other state/depth/door arrays/alignment        2880 bytes
+
+The scratch union is 1856 bytes: either the 1536-byte BFS queue or
+160 x 8-byte ray descriptors, 32 x 2-byte cache keys and 32 x 16-byte
+packed shaded columns. The 512-byte colour cache is INSIDE this union,
+not an additional allocation. Each column stores 32 four-bit pixels.
+Navigation finishes before rendering overwrites the queue. Cache lookup
+unpacks a nibble; overflow columns use direct texture sampling. This
+preserves exact output while freeing space for multiplayer. Per-player
+integers fit int16_t (angle <=1023, health/ammo <=100, score <=10).
+
+The 24-byte network ABI is stored inside the loaded header, after the
+original 12 bytes. State hashes cover explicit initialized player bytes,
+including cleared structure padding. Render scratch and local preferences
+are excluded. Z80 NET buffers are inside the loaded image; no per-frame
+network allocation or framebuffer network transfer occurs.
+
+Music is unchanged: 2617 stored data bytes, 374-byte PSG
+player, 17-byte state plus the 2048-byte Sharp history. Complete source
+E1M1 MIDI timing is arranged into the original two PSG melody/bass voices
+and percussion, with sound-effect priority. Loop length is 95.38 seconds.
+
+Video presentation still validates the word at 08008228h and writes
+only 8000 visible bytes in each 8192-byte CCM plane: 32000 bytes total.
+The 192-byte plane paddings remain untouched in both live video and the
+backbuffer. The destination can move between frames, including unaligned
+valid addresses. All non-video CCM and firmware flash remain untouched.
+
+The renderer still uses the packed 32-column cache and avoids opaque-wall
+overdraw. Actual instruction profiles for this build are recorded in
+build/profile_net.json. They do not directly predict hardware FPS.
+Host pacing remains three 50 Hz ticks, up to 16.7 FPS. While waiting for
+network input it polls at 50 Hz without redrawing or advancing simulation;
+the warning is drawn once after 800 ms. Network buffers remain in the
+Sharp image and the existing 24-byte ARM header.
+
+See build/build.json, memory.json, verification.json,
+network_verification.json and deathmatch_verification.json for evidence.

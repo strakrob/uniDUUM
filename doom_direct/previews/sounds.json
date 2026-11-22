@@ -1,0 +1,34 @@
+[
+  {
+    "effect": "shot",
+    "seconds": 0.0
+  },
+  {
+    "effect": "hit",
+    "seconds": 0.34
+  },
+  {
+    "effect": "kill",
+    "seconds": 0.64
+  },
+  {
+    "effect": "hurt",
+    "seconds": 1.1
+  },
+  {
+    "effect": "door",
+    "seconds": 1.42
+  },
+  {
+    "effect": "pickup",
+    "seconds": 1.96
+  },
+  {
+    "effect": "win",
+    "seconds": 2.44
+  },
+  {
+    "effect": "god",
+    "seconds": 3.06
+  }
+]

@@ -1,0 +1,113 @@
+UniDoom Direct v0.6 — measured memory and renderer budget
+======================================================
+
+E1M1 comes from the supplied d_e1m1.mid. Sector 2 has independently carved
+rooms/corridors; 264 walkability cells differ from sector 1. The near-wall
+renderer avoids opaque-wall overdraw and reuses shaded texture columns.
+
+LOADER AND SHARP RUNTIME RAM
+
+MZF including its 128-byte header:                           19034 bytes
+Loaded image at 3000h..79D9h:                            18906 bytes
+Free before the current 8000h loader limit:                    1574 bytes
+Host, keyboard, music/SFX and alignment before ARM payload:    4354 bytes
+
+The image embeds the ARM payload. Additional stored ARM code/data consumes
+both loader space and ARM space. The file header is not loaded into RAM.
+
+The streaming music decoder additionally owns ordinary Sharp RAM
+A000h..A7FFh: 2048 bytes of circular history. This is outside the CPU VRAM
+window and below the unchanged D000h stack top. Guard bytes on both sides
+and multiple complete history wraps are checked in emulation. Decoder
+state is initialized on every music restart; history need not be cleared.
+
+ARM USER ALLOCATION
+
+Uploaded ABI, code and compressed constants:                 14552 bytes
+Alignment before static state:                                  8 bytes
+Static state, decoded art/map and scratch:                   16984 bytes
+Code/constants/state, 20020000h..20027B37h:        31544 bytes
+Unused gap before backbuffer at 20028000h:                     1224 bytes
+Backbuffer at 20028000h..2002FFFFh:                           32768 bytes
+Total used within the original 65536-byte user window:       64312 bytes
+
+The call stack retains its original 20010000h top, outside this allocation.
+Firmware-owned surrounding RAM is not counted as available.
+
+Major static-state components:
+  Decoded 4bpp textures/sprites                               7168 bytes
+  Current mutable map                                         768 bytes
+  Navigation distance field                                   768 bytes
+  Shared BFS queue / ray descriptors+column keys              1536 bytes
+  Shaded texture-column cache                                3072 bytes
+  Ray-to-colour-cache indices                                 160 bytes
+  Partial-door UV/side coordinates                            320 bytes
+  Sixteen world particles                                     320 bytes
+  Other game/render state and alignment                      2872 bytes
+
+The 1536-byte union holds either the navigation queue or render descriptors
+and cache keys. Navigation finishes before rendering; the persistent
+navigation distance field is separate. A fresh queue is initialized on
+rebuild. Up to 96 shaded 32-texel columns are cached; additional columns
+use the normal sampling fallback. The cache is rebuilt each frame, so
+reactor animation, door keys and lighting remain current.
+
+COMPRESSION AND E1M1
+
+All three decoders share LZSS: eight-token flag groups, an 11-bit distance
+(up to 2048 bytes), and a 5-bit length (3..34 bytes). The Python encoder
+checks every compressed stream by reference decompression. ARM artwork
+uses its already-decoded output as history; Z80 music uses its RAM ring.
+
+Decoded art 7168 bytes -> stored compressed:                   1487 bytes
+Two maps, 1536 bytes -> stored compressed:                      280 bytes
+Guided routes use two-bit cell-to-cell directions.
+
+E1M1 event score: 6648 decoded bytes in 1662 records.
+Compressed score: 2561 bytes; divider table: 56 bytes.
+Total music data: 2617 bytes; Z80 player: 374 bytes;
+mutable player state: 17 bytes, plus the 2048-byte history above.
+Complete loop: 95.38 seconds / 4769 ticks at 50 Hz.
+
+The source's melodic channel 2 is raised by one octave and bass channel 3
+by two whole octaves to fit the PSG. Octave jumps are preserved. Polyphony
+is reduced to these two voices and one percussion voice; pitch-bend vibrato
+and additional harmony are omitted. Game effects retain their own tone
+channel and take priority on noise. Nine importer tests cover timing,
+sustain, running status and whole-channel transposition. Two full loops
+(9538 ticks) are byte-verified through the actual Z80 player.
+Maximum measured music/keyboard IRQ: 7963 T-states, below the modeled
+70000-T-state 50 Hz interval. This is an emulator result, not hardware timing.
+
+VGA PRESENTATION AND PERFORMANCE
+
+Live CCM slots, base read from 08008228h plus 0000h..7FFFh:    32768 bytes
+Accepted bases: 10000000h..10008000h inclusive. The complete allocation
+therefore always fits within 10000000h..1000FFFFh. Invalid publications
+cause no initialization or framebuffer writes and stop the host safely.
+Visible bytes copied from ARM backbuffer each frame:         32000 bytes
+Unwritten padding, 192 bytes per plane:                        768 bytes
+
+The ARM backbuffer stays at 20028000h. The VGA base is read as a volatile
+32-bit word from firmware flash at 08008228h on every frame, validated and
+published in the existing header word at 20020004h. That word starts at zero
+and is cleared on failure. This reuses the header field without adding
+mutable ARM state. Aligned destinations use word copies; unaligned valid
+bases use byte copies. There is no old fixed-address fallback. Sharp VRAM
+is bypassed. The final copy can overlap VGA scanout; firmware support is needed
+for guaranteed tear-free swapping. Other CCM remains firmware-owned.
+
+Measured Cortex-M4 instructions, v0.4 -> v0.6, same reference frame bytes:
+  start        5225093 -> 2544249 (51.3% fewer)
+  close_door   6657711 -> 2016899 (69.7% fewer)
+  corner       6650786 -> 2012908 (69.7% fewer)
+  long_hall    4473208 -> 2673160 (40.2% fewer)
+
+These instruction counts do not directly predict hardware FPS. The host
+pacing ceiling is now three 50 Hz ticks per frame, about 16.7 FPS instead
+of 12.5. Simulation remains per rendered frame, so the higher ceiling also
+advances movement/gameplay faster when hardware meets that cadence.
+
+Evidence: build/memory.json, verification.json and profile_comparison.json.
+The MZF is 203 bytes smaller than v0.4 despite retaining the full track.
+Further large additions still need careful loader and ARM allocation work.

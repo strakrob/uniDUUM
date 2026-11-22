@@ -1,0 +1,120 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0 20020000     1 . = 0x20020000
+20020000 20020000        c     1 .header
+20020000 20020000        c     1         build/unicard_header.o:(.header)
+20020008 20020008        0     1                 abi
+2002000c 2002000c     34a1     4 .text
+2002000c 2002000c        0     4         build/unicard_header.o:(.text)
+2002000c 2002000c     1b0c     4         build/raycaster.o:(.text)
+2002000c 2002000c        0     1                 $t.0
+2002000d 2002000d      fc8     1                 doom_entry
+20020036 20020036        0     1                 $d.1
+2002003e 2002003e        0     1                 $t.2
+20020468 20020468        0     1                 $d.3
+20020488 20020488        0     1                 $t.4
+20020dec 20020dec        0     1                 $d.5
+20020df4 20020df4        0     1                 $t.6
+20020eb8 20020eb8        0     1                 $d.7
+20020ec0 20020ec0        0     1                 $t.8
+20020f2c 20020f2c        0     1                 $d.9
+20020fd4 20020fd4        0     1                 $t.10
+20020fd5 20020fd5       94     1                 reset
+20021054 20021054        0     1                 $d.11
+20021068 20021068        0     1                 $t.12
+20021069 20021069       30     1                 sine
+20021090 20021090        0     1                 $d.13
+20021098 20021098        0     1                 $t.14
+20021099 20021099       1a     1                 blocker
+200210b5 200210b5      164     1                 can_stand
+20021200 20021200        0     1                 $d.15
+20021218 20021218        0     1                 $t.16
+20021219 20021219       30     1                 door_index
+20021244 20021244        0     1                 $d.17
+20021248 20021248        0     1                 $t.18
+20021249 20021249      31c     1                 trace
+20021550 20021550        0     1                 $d.19
+20021564 20021564        0     1                 $t.20
+20021565 20021565       4c     1                 pixel2
+200215ac 200215ac        0     1                 $d.21
+200215b0 200215b0        0     1                 $t.22
+200215b1 200215b1       cc     1                 wall_strip
+20021670 20021670        0     1                 $d.23
+2002167c 2002167c        0     1                 $t.24
+2002167d 2002167d       8c     1                 light
+200216fc 200216fc        0     1                 $d.25
+20021708 20021708        0     1                 $t.26
+20021709 20021709      220     1                 billboard
+200218f8 200218f8        0     1                 $d.27
+20021928 20021928        0     1                 $t.28
+20021929 20021929       50     1                 rect
+20021979 20021979       54     1                 pixel
+200219c8 200219c8        0     1                 $d.29
+200219cc 200219cc        0     1                 $t.30
+200219cd 200219cd       88     1                 text
+20021a50 20021a50        0     1                 $d.31
+20021a54 20021a54        0     1                 $t.32
+20021a55 20021a55       3e     1                 number
+20021a93 20021a93       12     1                 OUTLINED_FUNCTION_0
+20021aa5 20021aa5        a     1                 OUTLINED_FUNCTION_1
+20021aaf 20021aaf        e     1                 OUTLINED_FUNCTION_2
+20021abd 20021abd        a     1                 OUTLINED_FUNCTION_3
+20021ac7 20021ac7        6     1                 OUTLINED_FUNCTION_4
+20021acd 20021acd        8     1                 OUTLINED_FUNCTION_5
+20021ad5 20021ad5        a     1                 OUTLINED_FUNCTION_6
+20021adf 20021adf        6     1                 OUTLINED_FUNCTION_7
+20021ae5 20021ae5        e     1                 OUTLINED_FUNCTION_8
+20021af3 20021af3        e     1                 OUTLINED_FUNCTION_9
+20021b01 20021b01        a     1                 OUTLINED_FUNCTION_10
+20021b0b 20021b0b        e     1                 OUTLINED_FUNCTION_11
+20021b18 20021b18       20     4         <internal>:(.text)
+20021b38 20021b38        4     1         <internal>:(.text)
+20021b3c 20021b3c     1887     2         build/raycaster.o:(.rodata)
+20021b3c 20021b3c       1e     1                 tour_path
+20021b5a 20021b5a      202     1                 sine_quarter
+20021d5c 20021d5c      100     1                 world_map
+20021e5c 20021e5c       40     1                 light_table
+20021e9c 20021e9c      800     1                 textures
+2002269c 2002269c      c00     1                 sprites
+2002329c 2002329c      127     1                 font
+200233c3 200233c3       ea     1         <internal>:(.text)
+200234ad 200234ad        3     1 . = ALIGN ( 16 )
+200234b0 200234b0        0     1 __payload_end = .
+200234b0 200234b0      aa4     4 .bss
+200234b0 200234b0      aa4     4         build/raycaster.o:(.bss)
+200234b0 200234b0       40     1                 drones
+200234f0 200234f0      280     1                 wall_depth
+20023770 20023770      500     1                 door_depth
+20023c70 20023c70      280     1                 door_bottom
+20023ef0 20023ef0        1     1                 core
+20023ef4 20023ef4        1     1                 medkit
+20023ef8 20023ef8        1     1                 won
+20023efc 20023efc        1     1                 auto_mode
+20023f00 20023f00        4     1                 player_x
+20023f04 20023f04        4     1                 player_y
+20023f08 20023f08        4     1                 angle
+20023f0c 20023f0c        4     1                 health
+20023f10 20023f10        4     1                 ammo
+20023f14 20023f14        4     1                 kills
+20023f18 20023f18        4     1                 frame
+20023f1c 20023f1c        4     1                 fire_timer
+20023f20 20023f20        4     1                 cooldown
+20023f24 20023f24        4     1                 hurt_timer
+20023f28 20023f28        4     1                 map_on
+20023f2c 20023f2c        4     1                 flashlight
+20023f30 20023f30        4     1                 running
+20023f34 20023f34        4     1                 tour_index
+20023f38 20023f38        4     1                 use_down
+20023f3c 20023f3c        4     1                 walk_phase
+20023f40 20023f40        4     1                 message
+20023f44 20023f44        8     1                 door_goal
+20023f4c 20023f4c        8     1                 door_open
+20023f54 20023f54        0     1 __state_end = .
+20023f54 20023f54        0     1 
+       0        0       2b     1 .ARM.attributes
+       0        0       2b     1         build/unicard_header.o:(.ARM.attributes)
+       0        0      650     4 .symtab
+       0        0      650     4         <internal>:(.symtab)
+       0        0       3e     1 .shstrtab
+       0        0       3e     1         <internal>:(.shstrtab)
+       0        0      384     1 .strtab
+       0        0      384     1         <internal>:(.strtab)

@@ -1,0 +1,10 @@
+{
+  "file": "unidoom_v0_1.mzf",
+  "bytes": 14383,
+  "load": 12288,
+  "execute": 12288,
+  "arm_bytes": 13485,
+  "arm_entry": 537001997,
+  "framebuffer": 537034752,
+  "sha256": "82accd912cc9830f51ab3381fea6cd0b4ab740044de5d091cf22e91a5c60616b"
+}

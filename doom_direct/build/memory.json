@@ -1,0 +1,41 @@
+{
+  "z80_load": 12288,
+  "z80_image_end": 31194,
+  "z80_image_limit": 32768,
+  "z80_image_bytes": 18906,
+  "z80_image_free_bytes": 1574,
+  "z80_host_and_audio_bytes": 4354,
+  "arm_payload_bytes": 14552,
+  "arm_state_bytes": 16984,
+  "arm_code_state_bytes": 31544,
+  "arm_code_state_end": 537033528,
+  "arm_project_limit": 537034752,
+  "arm_project_free_bytes": 1224,
+  "arm_backbuffer_address": 537034752,
+  "arm_backbuffer_bytes": 32768,
+  "arm_total_allocated_bytes": 64312,
+  "asset_decoded_bytes": 7168,
+  "asset_compressed_bytes": 1487,
+  "maps_compressed_bytes": [
+    132,
+    148
+  ],
+  "navigation_scratch_bytes": 2304,
+  "music_data_bytes": 2617,
+  "music_player_code_bytes": 374,
+  "music_state_bytes": 17,
+  "z80_music_history_address": 40960,
+  "z80_music_history_bytes": 2048,
+  "column_cache_bytes": 3072,
+  "column_index_bytes": 160,
+  "partial_door_uv_bytes": 320,
+  "framebuffer_allocation_bytes": 32768,
+  "framebuffer_visible_bytes": 32000,
+  "ccm_outside_framebuffer_reserved_for_firmware": true,
+  "asset_bytes": {
+    "texture_32x32_4bpp": 512,
+    "sprite_32x32_4bpp": 512,
+    "map_32x24_u8": 768
+  },
+  "limits_note": "Current linker/loader limits; free firmware-owned CCM/main SRAM is not assumed."
+}

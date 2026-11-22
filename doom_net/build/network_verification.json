@@ -1,0 +1,33 @@
+{
+  "mzf_sha256": "2fa2782c37bec4aa7e67fc8637283ba8805571d46ce063e3da23c9f56a9f32dc",
+  "arm_hashes": [
+    36683,
+    36444,
+    54222,
+    15849,
+    13387,
+    12032,
+    33751,
+    63091,
+    17827,
+    35108
+  ],
+  "z80": {
+    "room": "DDQD",
+    "hash_frames": [
+      0,
+      16
+    ],
+    "common_states_equal": true
+  },
+  "actual_z80_and_cortex_m4": true,
+  "sharp_vram_accesses": 0,
+  "exact_player_counts": [
+    2,
+    3,
+    4
+  ],
+  "transient_wait_preserves_frame": true,
+  "sustained_wait_single_warning": true,
+  "marines_uploaded_and_drones_restored": true
+}

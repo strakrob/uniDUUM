@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "actual_loopback_tcp": true,
+  "checks": [
+    "ping/pong",
+    "create settings",
+    "join",
+    "start",
+    "opaque inputs",
+    "desync",
+    "disconnect"
+  ],
+  "relay_sha256": "92f468498c17d682453e471d11b44004a2bc4b29111d90068febad4e447c1115"
+}

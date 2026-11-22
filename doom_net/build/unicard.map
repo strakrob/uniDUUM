@@ -1,0 +1,207 @@
+     VMA      LMA     Size Align Out     In      Symbol
+       0        0        0     1 firmware_video_pointer = 0x08008228
+       0        0        0     1 __video_size = 0x8000
+       0        0        0     1 __back_buffer = 0x20028000
+       0        0        0     1 __back_end = 0x20030000
+       0        0 20020000     1 . = 0x20020000
+20020000 20020000       24     1 .header
+20020000 20020000       24     1         build/unicard_header.o:(.header)
+20020004 20020004        0     1                 video_address
+20020008 20020008        0     1                 abi
+2002000c 2002000c        0     1                 network
+20020024 20020024     4776     4 .text
+20020024 20020024        0     4         build/unicard_header.o:(.text)
+20020024 20020024     38ee     4         build/raycaster.o:(.text)
+20020024 20020024        0     1                 $t.0
+20020025 20020025     13e8     1                 doom_direct_entry
+200203f0 200203f0        0     1                 $d.1
+20020400 20020400        0     1                 $t.2
+20020bd8 20020bd8        0     1                 $d.3
+20020c00 20020c00        0     1                 $t.4
+20020ea0 20020ea0        0     1                 $d.5
+20020f0c 20020f0c        0     1                 $t.6
+200213a0 200213a0        0     1                 $d.7
+2002140c 2002140c        0     1                 $t.8
+2002140d 2002140d       6c     1                 unpack
+20021479 20021479       f8     1                 reset
+2002154c 2002154c        0     1                 $d.9
+20021570 20021570        0     1                 $t.10
+20021571 20021571       84     1                 net_reset
+200215e4 200215e4        0     1                 $d.11
+200215f4 200215f4        0     1                 $t.12
+200215f5 200215f5       6c     1                 net_load
+20021654 20021654        0     1                 $d.13
+20021660 20021660        0     1                 $t.14
+20021661 20021661     1114     1                 render
+20021a74 20021a74        0     1                 $d.15
+20021a98 20021a98        0     1                 $t.16
+20022204 20022204        0     1                 $d.17
+20022210 20022210        0     1                 $t.18
+20022414 20022414        0     1                 $d.19
+2002242c 2002242c        0     1                 $t.20
+20022698 20022698        0     1                 $d.21
+20022774 20022774        0     1                 $t.22
+20022775 20022775       80     1                 net_spawn
+200227e0 200227e0        0     1                 $d.23
+200227f4 200227f4        0     1                 $t.24
+200227f5 200227f5      13c     1                 can_stand
+2002291c 2002291c        0     1                 $d.25
+20022930 20022930        0     1                 $t.26
+20022931 20022931       4c     1                 solid
+20022974 20022974        0     1                 $d.27
+2002297c 2002297c        0     1                 $t.28
+2002297d 2002297d       30     1                 door_index
+200229a8 200229a8        0     1                 $d.29
+200229ac 200229ac        0     1                 $t.30
+200229ad 200229ad      130     1                 use_door
+20022ac4 20022ac4        0     1                 $d.31
+20022adc 20022adc        0     1                 $t.32
+20022add 20022add       30     1                 sine
+20022b04 20022b04        0     1                 $d.33
+20022b0c 20022b0c        0     1                 $t.34
+20022b0d 20022b0d       48     1                 move
+20022b50 20022b50        0     1                 $d.35
+20022b54 20022b54        0     1                 $t.36
+20022b55 20022b55       60     1                 net_store
+20022ba8 20022ba8        0     1                 $d.37
+20022bb4 20022bb4        0     1                 $t.38
+20022bb5 20022bb5       9c     1                 shoot
+20022c40 20022c40        0     1                 $d.39
+20022c50 20022c50        0     1                 $t.40
+20022c51 20022c51      1e8     1                 hit_scan
+20022e14 20022e14        0     1                 $d.41
+20022e38 20022e38        0     1                 $t.42
+20022e39 20022e39       1a     1                 blocker
+20022e55 20022e55       9c     1                 burst
+20022ee4 20022ee4        0     1                 $d.43
+20022ef0 20022ef0        0     1                 $t.44
+20022ef1 20022ef1      328     1                 trace
+200231fc 200231fc        0     1                 $d.45
+20023218 20023218        0     1                 $t.46
+20023219 20023219       88     1                 light
+20023298 20023298        0     1                 $d.47
+200232a0 200232a0        0     1                 $t.48
+200232a1 200232a1       b0     1                 wall_texel
+20023344 20023344        0     1                 $d.49
+20023350 20023350        0     1                 $t.50
+20023351 20023351       4c     1                 pixel2
+20023398 20023398        0     1                 $d.51
+2002339c 2002339c        0     1                 $t.52
+2002339d 2002339d      29c     1                 billboard
+20023604 20023604        0     1                 $d.53
+20023638 20023638        0     1                 $t.54
+20023639 20023639       50     1                 rect
+20023689 20023689       54     1                 pixel
+200236d8 200236d8        0     1                 $d.55
+200236dc 200236dc        0     1                 $t.56
+200236dd 200236dd       88     1                 text
+20023760 20023760        0     1                 $d.57
+20023764 20023764        0     1                 $t.58
+20023765 20023765       42     1                 number
+200237a7 200237a7       52     1                 OUTLINED_FUNCTION_0
+200237f9 200237f9        a     1                 OUTLINED_FUNCTION_1
+20023803 20023803        e     1                 OUTLINED_FUNCTION_2
+20023811 20023811       1a     1                 OUTLINED_FUNCTION_3
+2002382b 2002382b       1a     1                 OUTLINED_FUNCTION_4
+20023845 20023845       16     1                 OUTLINED_FUNCTION_5
+2002385b 2002385b        8     1                 OUTLINED_FUNCTION_6
+20023863 20023863        a     1                 OUTLINED_FUNCTION_7
+2002386d 2002386d       12     1                 OUTLINED_FUNCTION_8
+2002387f 2002387f       12     1                 OUTLINED_FUNCTION_9
+20023891 20023891       10     1                 OUTLINED_FUNCTION_10
+200238a1 200238a1        c     1                 OUTLINED_FUNCTION_11
+200238ad 200238ad        6     1                 OUTLINED_FUNCTION_12
+200238b3 200238b3        e     1                 OUTLINED_FUNCTION_13
+200238c1 200238c1        4     1                 OUTLINED_FUNCTION_14
+200238c5 200238c5        8     1                 OUTLINED_FUNCTION_15
+200238cd 200238cd        e     1                 OUTLINED_FUNCTION_16
+200238db 200238db        e     1                 OUTLINED_FUNCTION_17
+200238e9 200238e9        6     1                 OUTLINED_FUNCTION_18
+200238ef 200238ef        a     1                 OUTLINED_FUNCTION_19
+200238f9 200238f9        a     1                 OUTLINED_FUNCTION_20
+20023903 20023903        a     1                 OUTLINED_FUNCTION_21
+2002390d 2002390d        6     1                 OUTLINED_FUNCTION_22
+20023914 20023914      b2e     4         build/raycaster.o:(.rodata)
+20023914 20023914      5cf     1                 art_blob
+20023ee4 20023ee4        8     1                 map_blobs
+20023eec 20023eec       40     1                 spawn
+20023f2c 20023f2c       84     1                 map_blob0
+20023fb0 20023fb0       94     1                 map_blob1
+20024044 20024044      202     1                 sine_quarter
+20024246 20024246       40     1                 light_table
+20024288 20024288       40     1                 plane_bits
+200242c8 200242c8        3     1                 billboard.walk
+200242cc 200242cc       10     1                 hud.messages
+200242dc 200242dc      127     1                 font
+20024404 20024404        8     1                 tour_routes
+2002440c 2002440c       19     1                 tour_route0
+20024425 20024425       1d     1                 tour_route1
+20024444 20024444       20     4         <internal>:(.text)
+20024464 20024464       18     2         <internal>:(.text)
+2002447c 2002447c      31e     1         <internal>:(.text)
+2002479a 2002479a        6     1 . = ALIGN ( 16 )
+200247a0 200247a0        0     1 __payload_end = .
+200247a0 200247a0     3830     4 .bss
+200247a0 200247a0     3830     4         build/raycaster.o:(.bss)
+200247a0 200247a0     1c00     1                 art
+200263a0 200263a0      300     1                 world_map
+200266a0 200266a0      140     1                 particles
+200267e0 200267e0       a0     1                 drones
+20026880 20026880       90     1                 peers
+20026910 20026910      280     1                 wall_depth
+20026b90 20026b90      500     1                 door_depth
+20027090 20027090      280     1                 door_bottom
+20027310 20027310      740     1                 scratch
+20027a50 20027a50       a0     1                 column_index
+20027af0 20027af0      140     1                 door_uv
+20027c30 20027c30      300     1                 nav_dist
+20027f30 20027f30        1     1                 mp_active
+20027f34 20027f34        1     1                 secret_found
+20027f38 20027f38        1     1                 blue_key
+20027f3c 20027f3c        1     1                 ai_on
+20027f40 20027f40        1     1                 core
+20027f44 20027f44        1     1                 medkit
+20027f48 20027f48        1     1                 auto_mode
+20027f4a 20027f4a        2     1                 processed_tick
+20027f4c 20027f4c        4     1                 sector
+20027f50 20027f50        4     1                 map_on
+20027f54 20027f54        4     1                 flashlight
+20027f58 20027f58        4     1                 weapon
+20027f5c 20027f5c        4     1                 notice
+20027f60 20027f60        4     1                 tour_x
+20027f64 20027f64        4     1                 tour_y
+20027f68 20027f68        4     1                 nav_seed
+20027f6c 20027f6c        4     1                 particle_head
+20027f70 20027f70        4     1                 player_x
+20027f74 20027f74        4     1                 player_y
+20027f78 20027f78        4     1                 angle
+20027f7c 20027f7c        4     1                 health
+20027f80 20027f80        4     1                 ammo
+20027f84 20027f84        4     1                 kills
+20027f88 20027f88        4     1                 cheat_message
+20027f8c 20027f8c        4     1                 cheat_pos
+20027f90 20027f90        4     1                 god_mode
+20027f94 20027f94        4     1                 won
+20027f98 20027f98        4     1                 frame
+20027f9c 20027f9c        4     1                 fire_timer
+20027fa0 20027fa0        4     1                 cooldown
+20027fa4 20027fa4        4     1                 hurt_timer
+20027fa8 20027fa8        4     1                 running
+20027fac 20027fac        4     1                 tour_index
+20027fb0 20027fb0        4     1                 use_down
+20027fb4 20027fb4        4     1                 walk_phase
+20027fb8 20027fb8        4     1                 message
+20027fbc 20027fbc        4     1                 active_peer
+20027fc0 20027fc0        8     1                 door_goal
+20027fc8 20027fc8        8     1                 door_open
+20027fd0 20027fd0        0     1 __state_end = .
+20027fd0 20027fd0        0     1 
+20027fd0 20027fd0        0     1 
+       0        0       2b     1 .ARM.attributes
+       0        0       2b     1         build/unicard_header.o:(.ARM.attributes)
+       0        0      c20     4 .symtab
+       0        0      c20     4         <internal>:(.symtab)
+       0        0       3e     1 .shstrtab
+       0        0       3e     1         <internal>:(.shstrtab)
+       0        0      74e     1 .strtab
+       0        0      74e     1         <internal>:(.strtab)
