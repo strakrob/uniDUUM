@@ -8,8 +8,6 @@ net_cycle:
         cp 2
         jr nz,net_event_saved
         ld a,e
-        cp 'M'
-        jr z,net_save_view
         cp 'L'
         jr nz,net_event_saved
 net_save_view:

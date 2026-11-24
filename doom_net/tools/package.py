@@ -15,6 +15,7 @@ assert mzf.read_bytes()[128:]==(ROOT/'build/host.bin').read_bytes()
 assert struct.unpack_from('<HHH',mzf.read_bytes(),18)==(len(mzf.read_bytes())-128,0x3000,0x3000)
 assert read('verification.json')['mzf_sha256']==digest
 net=read('network_verification.json');assert net['mzf_sha256']==digest and net['exact_player_counts']==[2,3,4]
+assert net['multiplayer_minimap_disabled'] and net['multiplayer_god_mode_disabled']
 assert net['transient_wait_preserves_frame'] and net['sustained_wait_single_warning'] and net['marines_uploaded_and_drones_restored']
 assert read('deathmatch_verification.json')['passed'] and read('player_graphics_verification.json')['verified']
 for name in ['relay_tcp_verification.json','server_verification.json']:
@@ -27,7 +28,7 @@ release=dict(project=build['project'],mzf_sha256=digest,arm_payload_sha256=sha(R
              emulator_suite_passed=True,actual_loopback_tcp_passed=True,
              real_server_entrypoint_three_tcp_clients_passed=True,
              physical_mk3b_verification=False,exact_player_counts=[2,3,4],
-             marine_sprites=True,transient_wait_preserves_frame=True,
+             marine_sprites=True,multiplayer_minimap=False,multiplayer_god_mode=False,transient_wait_preserves_frame=True,
              sustained_wait_warning_after_ms=800,arm_bytes_used=build['memory_budget']['arm_total_allocated_bytes'],
              arm_allocation_bytes=65536)
 (ROOT/'build/release.json').write_text(json.dumps(release,indent=2)+'\n')

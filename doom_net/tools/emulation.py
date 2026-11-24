@@ -52,7 +52,7 @@ level=json.loads((ROOT/'build/level.json').read_text())
 entry,initial_fb=struct.unpack_from('<II',payload)
 fb=0x10001f80 # Test fixture only; production reads the firmware publication.
 FLASH_SLOT=0x08008228
-mzf=(ROOT.parent/'unidoom_net_v0_2.mzf').read_bytes()
+mzf=(ROOT.parent/'unidoom_net_v0_3.mzf').read_bytes()
 length,load,execute=struct.unpack_from('<HHH',mzf,18)
 assert len(mzf)==length+128 and load==execute==0x3000
 assert mzf[128:]==(ROOT/'build/host.bin').read_bytes()

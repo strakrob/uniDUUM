@@ -1,5 +1,5 @@
 {
-  "mzf_sha256": "2fa2782c37bec4aa7e67fc8637283ba8805571d46ce063e3da23c9f56a9f32dc",
+  "mzf_sha256": "83469b777f2742413cd8f7ac1a71abc04f27f6882eda7ed3489669200ba251c0",
   "arm_hashes": [
     36683,
     36444,
@@ -29,5 +29,7 @@
   ],
   "transient_wait_preserves_frame": true,
   "sustained_wait_single_warning": true,
-  "marines_uploaded_and_drones_restored": true
+  "marines_uploaded_and_drones_restored": true,
+  "multiplayer_minimap_disabled": true,
+  "multiplayer_god_mode_disabled": true
 }

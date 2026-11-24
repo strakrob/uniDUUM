@@ -64,23 +64,23 @@ host=(ROOT/'build/host.bin').read_bytes()
 assert len(host)+0x3000<0xa000
 header=bytearray(128)
 header[0]=1
-title=b'UNIDOOM NET02'
+title=b'UNIDOOM NET03'
 assert len(title)<=16
 header[1:18]=(title+b'\r').ljust(17,b'\r')
 struct.pack_into('<HHH',header,18,len(host),0x3000,0x3000)
 header[24:]=b'\xff'*104
-output=ROOT.parent/'unidoom_net_v0_2.mzf'
+output=ROOT.parent/'unidoom_net_v0_3.mzf'
 output.write_bytes(header+host)
 payload=(ROOT/'build/unicard.bin').read_bytes()
 entry,fb=struct.unpack_from('<II',payload)
 assert entry&1 and 0x2002000c<=entry<0x20028000
 assert fb==0 and payload[8:12]==b'\0'*4
 network_build=int((ROOT/'build/network.inc').read_text().split()[-1])
-metadata={'project':'UniDoom NET v0.2','multiplayer':{'mode':'deathmatch','players':[2,4],
+metadata={'project':'UniDoom NET v0.3','multiplayer':{'mode':'deathmatch','players':[2,4],
           'game_id':0x5544,'build_id':network_build,'input_delay_frames':2,
           'input_bytes_per_slot':2,'room_slots':'host selects exactly 2, 3 or 4','frag_limit':10,
           'transport':'UniCard NET 0xA0..0xA9 / Ethernet TCP relay 8766',
-          'state_hash_period_frames':16,'settings_protocol':2,
+          'state_hash_period_frames':16,'settings_protocol':2,'multiplayer_minimap':False,'multiplayer_god_mode':False,
           'transient_stall_behavior':'hold last VGA frame; poll at 50 Hz',
           'stall_warning_after_ticks':40,'player_graphics':'three humanoid marine poses'},'file':output.name,'bytes':output.stat().st_size,
           'load':0x3000,'execute':0x3000,'arm_bytes':len(payload),

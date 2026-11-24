@@ -586,7 +586,7 @@ static void render(void) {
     }
     float dx=sine(angle+256),dy=sine(angle);
     walls(dx,dy);world_rows(dx,dy);partial_doors();objects(dx,dy);effects(dx,dy);gun();
-    if(map_on)minimap();hud();
+    if(map_on && !mp_active)minimap();hud();
 }
 static void present(uint32_t address){
 #ifdef UNIDOOM_NATIVE
@@ -612,11 +612,12 @@ void doom_direct_entry(void) {
     video_address=address;
     if(!abi.initialized){abi.initialized=1;sector=0;unpack(art,art_blob,ART_BYTES);reset();mp_active=0;processed_tick=0xffff;key=0;buttons=0;}
     if(network.mode){
+        /* Network lobbies and matches never inherit single-player assists. */
+        map_on=god_mode=cheat_pos=cheat_message=0;
         if(network.mode==2){
             if(!mp_active)net_reset();
             if(!network.ui && processed_tick!=network.tick){net_tick();processed_tick=network.tick;}
             net_load(network.slot);
-            if(key=='M')map_on^=1;
             if(key=='L')flashlight^=1;
         }
         render();net_overlay();

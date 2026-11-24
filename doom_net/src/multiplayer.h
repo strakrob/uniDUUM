@@ -93,7 +93,7 @@ static void net_hud(void){
     rect(0,168,320,10,8);int xhp=text(3,170,"HP ",7);number(xhp,170,health,3,hurt_timer?10:15);
     xhp=text(66,170,weapon?"SG ":"P ",7);number(xhp,170,ammo,2,14);
     for(int i=0;i<4;++i)if(network.mask&(1<<i)){int x=124+i*48;x=text(x,170,"P",colors[i]);x=number(x,170,i+1,1,colors[i]);number(x+3,170,peers[i].score,2,15);}
-    text(2,183,"SPACE FIRE F DOOR V GUN Z RUN M MAP B MUSIC",7);
+    text(2,183,"SPACE FIRE F DOOR V GUN Z RUN B MUSIC",7);
     text(2,192,"H HOST J JOIN ESC LEAVE / HOST R RESET N MAP",13);
     if(won || health<=0){rect(82,64,156,28,0);
         if(won){int x=text(98,67,"WINNER P",14);number(x,67,won,1,colors[won-1]);text(98,80,"HOST: R REMATCH",15);}

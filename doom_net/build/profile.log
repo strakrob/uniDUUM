@@ -1,9 +1,9 @@
 [
   {
     "view": "start",
-    "instructions": 2625307,
+    "instructions": 2631392,
     "functions": {
-      "render": 1462194,
+      "render": 1468288,
       "pixel": 497630,
       "wall_texel": 387347,
       "doom_direct_entry": 104798,
@@ -18,21 +18,20 @@
       "sine": 210,
       "number": 138,
       "OUTLINED_FUNCTION_7": 60,
-      "OUTLINED_FUNCTION_21": 33,
+      "OUTLINED_FUNCTION_19": 33,
       "OUTLINED_FUNCTION_3": 14,
       "OUTLINED_FUNCTION_2": 12,
-      "OUTLINED_FUNCTION_22": 12,
+      "OUTLINED_FUNCTION_20": 12,
       "OUTLINED_FUNCTION_9": 10,
-      "OUTLINED_FUNCTION_19": 10,
-      "OUTLINED_FUNCTION_18": 9,
+      "OUTLINED_FUNCTION_17": 10,
       "OUTLINED_FUNCTION_12": 6
     }
   },
   {
     "view": "close_door",
-    "instructions": 2206114,
+    "instructions": 2212199,
     "functions": {
-      "render": 1425960,
+      "render": 1432054,
       "pixel": 497630,
       "doom_direct_entry": 104809,
       "text": 57252,
@@ -46,22 +45,21 @@
       "billboard": 436,
       "number": 138,
       "sine": 84,
-      "OUTLINED_FUNCTION_21": 33,
+      "OUTLINED_FUNCTION_19": 33,
       "OUTLINED_FUNCTION_3": 14,
       "OUTLINED_FUNCTION_2": 12,
-      "OUTLINED_FUNCTION_22": 12,
+      "OUTLINED_FUNCTION_20": 12,
       "OUTLINED_FUNCTION_9": 10,
-      "OUTLINED_FUNCTION_19": 10,
-      "OUTLINED_FUNCTION_18": 9,
+      "OUTLINED_FUNCTION_17": 10,
       "OUTLINED_FUNCTION_7": 6,
       "OUTLINED_FUNCTION_12": 6
     }
   },
   {
     "view": "corner",
-    "instructions": 2202155,
+    "instructions": 2208240,
     "functions": {
-      "render": 1426753,
+      "render": 1432847,
       "pixel": 497630,
       "doom_direct_entry": 104798,
       "text": 57252,
@@ -74,21 +72,20 @@
       "billboard": 209,
       "number": 138,
       "sine": 70,
-      "OUTLINED_FUNCTION_21": 33,
+      "OUTLINED_FUNCTION_19": 33,
       "OUTLINED_FUNCTION_3": 14,
       "OUTLINED_FUNCTION_2": 12,
-      "OUTLINED_FUNCTION_22": 12,
+      "OUTLINED_FUNCTION_20": 12,
       "OUTLINED_FUNCTION_9": 10,
-      "OUTLINED_FUNCTION_19": 10,
-      "OUTLINED_FUNCTION_18": 9,
+      "OUTLINED_FUNCTION_17": 10,
       "OUTLINED_FUNCTION_12": 6
     }
   },
   {
     "view": "long_hall",
-    "instructions": 2703432,
+    "instructions": 2709517,
     "functions": {
-      "render": 1469155,
+      "render": 1475249,
       "pixel": 497630,
       "wall_texel": 453768,
       "doom_direct_entry": 104798,
@@ -103,13 +100,12 @@
       "sine": 210,
       "number": 138,
       "OUTLINED_FUNCTION_7": 60,
-      "OUTLINED_FUNCTION_21": 33,
+      "OUTLINED_FUNCTION_19": 33,
       "OUTLINED_FUNCTION_3": 14,
       "OUTLINED_FUNCTION_2": 12,
-      "OUTLINED_FUNCTION_22": 12,
+      "OUTLINED_FUNCTION_20": 12,
       "OUTLINED_FUNCTION_9": 10,
-      "OUTLINED_FUNCTION_19": 10,
-      "OUTLINED_FUNCTION_18": 9,
+      "OUTLINED_FUNCTION_17": 10,
       "OUTLINED_FUNCTION_12": 6
     }
   }

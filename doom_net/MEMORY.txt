@@ -1,11 +1,11 @@
-UniDoom NET v0.2 — measured allocation
+UniDoom NET v0.3 — measured allocation
 =====================================
 
-MZF including 128-byte header: 27420 bytes.
-Sharp loaded image: 27292 bytes, 3000h..9A9Bh.
-Unused before A000h: 1380 bytes.
+MZF including 128-byte header: 27394 bytes.
+Sharp loaded image: 27266 bytes, 3000h..9A81h.
+Unused before A000h: 1406 bytes.
 Z80 host/network/music/SFX/skins/alignment: 8962 bytes.
-Embedded ARM payload: 18330 bytes.
+Embedded ARM payload: 18304 bytes.
 
 New marine graphics use no additional ARM artwork allocation. Three
 32x32 4bpp player poses (1536 bytes) and the three original drone frames
@@ -21,13 +21,13 @@ ordinary MZ program. Host code and IRQ vector remain below 8000h; the
 upper image is embedded ARM code/constants. Music history is unchanged
 at A000h..A7FFh (2048 bytes) and the stack top remains D000h.
 
-ARM payload: 18330 bytes, plus alignment to static state.
+ARM payload: 18304 bytes, plus alignment to static state.
 ARM BSS/static state: 14384 bytes.
-ARM code/constants/state: 32720 bytes.
-Static end: 20027FD0h; backbuffer starts 20028000h.
-Free gap before backbuffer: 48 bytes.
+ARM code/constants/state: 32688 bytes.
+Static end: 20027FB0h; backbuffer starts 20028000h.
+Free gap before backbuffer: 80 bytes.
 Backbuffer: 32768 bytes at 20028000h..2002FFFFh.
-Total ARM user allocation used: 65488 / 65536 bytes.
+Total ARM user allocation used: 65456 / 65536 bytes.
 The native call stack keeps its original 20010000h top outside this window.
 No surrounding firmware RAM or extra CCM is borrowed.
 

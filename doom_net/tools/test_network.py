@@ -163,13 +163,18 @@ def arm_checks():
     native.native_cold();native.native_key(0,0);native_skins(native,ROOT)
     hashes=[]
     for tick in range(10):
-        keys=bytes([ord('V') if tick==3 else ord('N') if tick==7 else 0,1 if tick<4 else 64,0,8,0,16,0,2])
+        keys=bytes([ord('V') if tick==3 else ord('N') if tick==7 else ord('M'),1 if tick<4 else 64,254,8,ord('D'),16,ord('Q'),2])
+        if tick==4:
+            for name in ('map_on','god_mode'):a.u.mem_write(arm_symbols[name],struct.pack('<I',1))
         h=a.net(0,15,tick,keys);assert b.net(3,15,tick,keys)==h
         assert a.state()==b.state(),'Different local cameras changed the shared state'
         native.native_net(0,15,tick,(ct.c_uint8*8).from_buffer_copy(keys))
         assert native.native_net_hash()==h,'ARM/native state hash differs'
         assert ct.string_at(native.native_peers(),arm_sizes['peers'])==a.peers()
         assert ct.string_at(native.native_back_frame(),32768)==bytes(a.u.mem_read(0x20028000,32768))
+        for p in (a,b):
+            for name in ('map_on','god_mode','cheat_pos','cheat_message'):
+                assert bytes(p.u.mem_read(arm_symbols[name],arm_sizes[name]))==bytes(arm_sizes[name]),name
         hashes.append(h)
     before=a.state();a.net(0,15,9,bytes(8),ui=4);assert a.state()==before,'Waiting advanced simulation'
     a.net(0,15,9,bytes(8));assert a.state()==before,'Duplicate tick ran twice'
@@ -181,7 +186,11 @@ def arm_checks():
 def z80_checks():
     relay=Relay();a=NetMachine(relay);b=NetMachine(relay)
     for p in (a,b):p.frame()
+    a.arm.u.mem_write(arm_symbols['map_on'],struct.pack('<I',1))
+    a.arm.u.mem_write(arm_symbols['god_mode'],struct.pack('<I',1))
     a.key('H');assert a.field('mode')==1 and a.field('ui')==3 and a.card.peer.room is None
+    for name in ('map_on','god_mode'):
+        assert struct.unpack('<I',a.arm.u.mem_read(arm_symbols[name],4))[0]==0
     a.key('1');assert a.field('ui')==3,'Invalid player count created a room'
     a.key('2');assert a.field('ui')==1 and a.field('slots')==2
     # A legal code that is also the offline cheat must remain typeable.
@@ -209,7 +218,7 @@ def z80_checks():
         if len(a.arm.calls)==count:break
     else:raise AssertionError('Peer did not reach the missing-input frame')
     before=a.arm.state();pixels=bytes(a.arm.u.mem_read(fb,32768));calls=len(a.arm.calls)
-    a.frame(ord('M'));a.frame();a.frame()
+    a.frame(ord('M'));a.frame();a.frame(ord('L'));a.frame()
     assert a.arm.state()==before and len(a.arm.calls)==calls
     assert bytes(a.arm.u.mem_read(fb,32768))==pixels,'Transient stall flashed the VGA image'
     assert a.field('wait_visible')==0
@@ -217,7 +226,9 @@ def z80_checks():
     for _ in range(45):a.frame()
     assert a.field('wait_visible')==1 and len(a.arm.calls)==calls+1
     assert a.arm.state()==before,'A sustained stall advanced game simulation'
-    assert struct.unpack('<I',a.arm.u.mem_read(arm_symbols['map_on'],4))[0]==1,'A local key was lost while waiting'
+    assert struct.unpack('<I',a.arm.u.mem_read(arm_symbols['map_on'],4))[0]==0,'M enabled the multiplayer minimap'
+    assert struct.unpack('<I',a.arm.u.mem_read(arm_symbols['god_mode'],4))[0]==0
+    assert struct.unpack('<I',a.arm.u.mem_read(arm_symbols['flashlight'],4))[0]==0,'L was lost while waiting'
     for _ in range(3):a.frame()
     assert len(a.arm.calls)==calls+1
     # Feed the missing peer and recover without another warning.
@@ -303,6 +314,7 @@ if __name__=='__main__':
     relay_checks();hashes=arm_checks();z80_report=z80_checks();count_checks()
     report=dict(mzf_sha256=hashlib.sha256(mzf).hexdigest(),arm_hashes=hashes,z80=z80_report,actual_z80_and_cortex_m4=True,sharp_vram_accesses=0,exact_player_counts=[2,3,4],
                 transient_wait_preserves_frame=True,sustained_wait_single_warning=True,
-                marines_uploaded_and_drones_restored=True)
+                marines_uploaded_and_drones_restored=True,multiplayer_minimap_disabled=True,
+                multiplayer_god_mode_disabled=True)
     (ROOT/'build/network_verification.json').write_text(json.dumps(report,indent=2)+'\n')
     print('PASS: UniDoom NET multiplayer emulation')

@@ -24,6 +24,28 @@ def setup(mask=3):
     native.native_net_pose(0,3.5,8.5,0);native.native_net_pose(1,5.5,8.5,512)
 
 def main():
+    # Carry both single-player assists into the network lobby: neither may survive.
+    native.native_cold();native.native_key(0,0)
+    native.native_key(ord('M'),0);native.native_key(254,0)
+    assert native.native_state(11)==native.native_state(23)==1
+    net=(ct.c_uint8*24).in_dll(native,'network');net[0]=1
+    native.native_key(0,0)
+    assert all(native.native_state(i)==0 for i in (11,23,24,25)),'Lobby inherited single-player assists'
+    # M, DDQD and the latched FEh cheat event must also do nothing in a match.
+    setup();native.native_key(0,0)
+    before=ct.string_at(native.native_frame(),32768)
+    for key in [ord('M'),254,*map(ord,'IDDQD')]:
+        native.native_key(key,0)
+        assert native.native_state(11)==native.native_state(23)==0
+        assert ct.string_at(native.native_frame(),32768)==before,'Multiplayer assist changed the image'
+    # A remote cheat attempt must not prevent ordinary lethal damage.
+    native.native_net_health(1,100)
+    for _ in range(13):p=step([ord('M'),64,254,0,0,0,0,0])
+    assert p[1].health==0 and p[0].score==1,'Remote god-mode attempt blocked damage'
+    # Leaving the match restores the availability of both single-player features.
+    net[0]=0;native.native_key(0,0)
+    native.native_key(ord('M'),0);native.native_key(254,0)
+    assert native.native_state(11)==native.native_state(23)==1
     setup();p=step([0,64,0,0,0,0,0,0]);assert p[1].health==100 and p[0].shield==0,'Spawn shield failed'
     setup();native.native_net_health(1,100)
     for i in range(13):p=step([0,64,0,0,0,0,0,0])
@@ -55,7 +77,8 @@ def main():
     native.native_net_pose(0,3.5,8.5,0);native.native_net_pose(1,5.5,8.5,512);step()
     image(ct.string_at(native.native_frame(),32768)).resize((960,600),Image.Resampling.NEAREST).save('previews/opponent.png')
     checks=['spawn protection','wall occlusion','pistol/shotgun damage and ammo','frags','respawn',
-            'four valid distinct spawns in both sectors','ten-frag victory','host rematch/map control','multiplayer cheats disabled']
+            'four valid distinct spawns in both sectors','ten-frag victory','host rematch/map control','multiplayer cheats disabled','multiplayer minimap disabled',
+            'lobby clears inherited assists','single-player map/god mode retained']
     (ROOT/'build/deathmatch_verification.json').write_text(json.dumps(dict(checks=checks,passed=True),indent=2)+'\n')
     print('PASS: '+', '.join(checks))
 if __name__=='__main__':main()

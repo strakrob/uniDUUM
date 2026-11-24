@@ -1,7 +1,7 @@
-UniDoom NET v0.2 — UniCard Ethernet mk3b deathmatch
+UniDoom NET v0.3 — UniCard Ethernet mk3b deathmatch
 ================================================
 
-Separate project based on UniDoom Direct v0.6. Load unidoom_net_v0_2.mzf.
+Separate project based on UniDoom Direct v0.6. Load unidoom_net_v0_3.mzf.
 The existing doom_direct project and its MZF are preserved.
 
 2–4 Sharp MZ-800 machines play deathmatch, one player per machine. First to
@@ -14,8 +14,10 @@ protection; firing ends protection. Pistol hits do 25 damage; the shotgun
 fires three hits. There is no friendly/enemy drone AI in deathmatch.
 
 The complete previous single-player game remains available, including both
-maps, moving drones, secrets, weapons, E1M1 music and DDQD. Cheats and the
-automatic tour are disabled during deathmatch. Players can pass through
+maps, moving drones, secrets, weapons, E1M1 music and DDQD. The minimap,
+god mode, cheats and the automatic tour are disabled during deathmatch. Entering any network lobby
+also clears an active single-player minimap or god mode. The M key and
+DDQD/IDDQD cannot enable these features in a match. Players can pass through
 each other; collision against the level geometry remains active.
 
 HARDWARE AND RELAY SETUP
@@ -61,7 +63,7 @@ This program uses that shared card API; it does not add/flash firmware.
    Use the PC's LAN address, not 127.0.0.1. The public mzpico.com relay is
    WebSocket-only; UniCard Ethernet's documented transport is TCP JSON lines.
 
-3. Load the identical unidoom_net_v0_2.mzf on every machine.
+3. Load the identical unidoom_net_v0_3.mzf on every machine.
 
 4. One player presses H. The Sharp now asks HOW MANY PLAYERS? 2 / 3 / 4.
    Press the exact count, including the host. Only then is a room created
@@ -88,7 +90,7 @@ KEYS
   F                    Use a door / secret
   V                    Pistol / shotgun
   Z                    Walk / run
-  M                    Local minimap
+  M                    Minimap in single-player only (disabled online)
   L                    Local flashlight
   B                    Local music on/off
   H / J                Host / join from single-player
@@ -96,8 +98,8 @@ KEYS
   R                    Host: rematch, preserving the selected map
   N                    Host: switch between the two different maps
 
-Offline-only controls: R reset, 1/2 select sector, P guided tour, DDQD god
-mode. The lobby shows JOINED / NEEDED, so a three-player room explicitly displays
+Offline-only controls: M minimap, R reset, 1/2 select sector, P guided tour,
+DDQD god mode. The lobby shows JOINED / NEEDED, so a three-player room explicitly displays
 1 / 3, 2 / 3 and 3 / 3 as players connect. Each machine carries one player.
 
 The host selects the other map with N once play starts. Both maps have four
@@ -144,8 +146,9 @@ and skips ARM rendering entirely, polling again at the next 50 Hz tick.
 It never predicts or skips a remote input. After 40 ticks (800 ms), it draws
 WAITING FOR PLAYERS once and holds that warning until recovery. Ten seconds
 without progress stops the match. Normal packet jitter no longer alternates
-the full-screen message and game view. Local M/L taps are retained while
-waiting. Exact room size also prevents waiting on unused slot 3 or 4.
+the full-screen message and game view. Local L taps are retained while
+waiting. The minimap and god/cheat state are forced off for network screens;
+the deathmatch HUD does not advertise M MAP. Exact room size also prevents waiting on unused slot 3 or 4.
 The slowest player limits simulation cadence. Two-frame input delay is
 about 120 ms at the 16.7 FPS ceiling; actual speed depends on the hardware.
 
@@ -187,7 +190,7 @@ are included. The existing user-supplied d_e1m1.mid supplies the PSG music.
 BUILD AND VERIFICATION
 
 From doom_net:
-  make                 build root unidoom_net_v0_2.mzf
+  make                 build root unidoom_net_v0_3.mzf
   make verify          full single-player + multiplayer emulator checks
   make verify-tcp      actual loopback TCP listener test
   make server          local LAN server (default TCP 8766)
@@ -205,7 +208,7 @@ protocol model of the NET card, plus independent native combat fixtures.
 It covers real 2-, 3- and 4-peer Z80/ARM matches, four ARM player states,
 exact native/ARM images and hashes, count selection, rooms/readiness,
 unchanged VGA during short stalls, a single sustained-stall warning, local
-keys during waits, sprite upload/restoration, duplicate frames, timeouts,
+light toggles during waits, disabled online minimap/god mode, sprite upload/restoration, duplicate frames, timeouts,
 missing NET, disconnects, shots, scoring, spawning and map/rematch control.
 The single-player regression additionally checks 93 host/ARM frames, both
 complete guided tours, independent ray/collision/AI checks, firmware-pointer

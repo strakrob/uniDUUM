@@ -8,7 +8,10 @@
     "four valid distinct spawns in both sectors",
     "ten-frag victory",
     "host rematch/map control",
-    "multiplayer cheats disabled"
+    "multiplayer cheats disabled",
+    "multiplayer minimap disabled",
+    "lobby clears inherited assists",
+    "single-player map/god mode retained"
   ],
   "passed": true
 }

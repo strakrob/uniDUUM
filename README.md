@@ -10,7 +10,7 @@ Each MZF contains its maps, graphics and game code. No Doom WAD or external game
 | --- | --- | --- | --- | --- |
 | **UniDoom Classic** — [`doom/`](doom/) | v0.1 | One 16×16 sector, four drones, pistol, lifting doors, data core and exit | ARM renders; Z80 copies the frame to Sharp VRAM | [MZF](unidoom_v0_1.mzf) · [Source ZIP](unidoom_v0_1.zip) |
 | **UniDoom Direct** — [`doom_direct/`](doom_direct/) | v0.6 | Two different 32×24 sectors, eight moving drones, keys, secrets, pistol/shotgun, music and effects | ARM presents directly to the UniCard VGA buffer | [MZF](unidoom_direct_v0_6.mzf) · [Source ZIP](unidoom_direct_v0_6.zip) |
-| **UniDoom NET** — [`doom_net/`](doom_net/) | v0.2 | Direct's single-player game plus **2–4-player Ethernet deathmatch**, marine sprites, respawning and frag scores | Direct UniCard VGA output, with synchronized network inputs | [MZF](unidoom_net_v0_2.mzf) · [Source/server ZIP](unidoom_net_v0_2.zip) |
+| **UniDoom NET** — [`doom_net/`](doom_net/) | v0.3 | Direct's single-player game plus **2–4-player Ethernet deathmatch**, marine sprites, respawning and frag scores | Direct UniCard VGA output, with synchronized network inputs | [MZF](unidoom_net_v0_3.mzf) · [Source/server ZIP](unidoom_net_v0_3.zip) |
 
 Choose **Direct** for the expanded single-player game, **NET** for LAN deathmatch, or **Classic** to explore the original Sharp VRAM transfer harness. Older versioned MZFs and ZIPs remain available in the repository root.
 
@@ -34,7 +34,8 @@ Explore two independently built sectors with patrolling drones that navigate aro
 
 One player per machine, with **exactly 2, 3 or 4 players selected by the host**. Opponents use original humanoid marine sprites with helmets, rifles, armour and boots, in four team colours. First to **10 frags** wins. Death triggers an automatic respawn; spawn protection ends when firing.
 
-Brief packet delays retain the last game frame. A sustained stall displays one warning after **800 ms**; ten seconds without progress ends the match. Single-player remains available, including its original drone graphics.
+Brief packet delays retain the last game frame. A sustained stall displays one warning after **800 ms**; ten seconds without progress ends the match. The minimap and god mode are disabled in multiplayer, including network
+lobbies. Single-player retains both features and its original drone graphics.
 
 <img src="doom_net/previews/opponent.png" alt="UniDoom NET showing a green marine opponent" width="640">
 
@@ -48,7 +49,7 @@ All three editions require a Sharp MZ-800 with 320×200, 16-colour graphics and 
 | --- | --- |
 | Classic | OpenCPU upload, execution and framebuffer readback, using ports `50h`/`51h` and commands `CAh`–`CEh` |
 | Direct v0.6 | OpenCPU plus the firmware-published VGA buffer pointer described below |
-| NET v0.2 | Direct's interfaces plus Ethernet and BomberNet-compatible **NET commands `A0h`–`A9h`**; `INFO` (`95h`) must advertise feature bit `08h` in byte 3 |
+| NET v0.3 | Direct's interfaces plus Ethernet and BomberNet-compatible **NET commands `A0h`–`A9h`**; `INFO` (`95h`) must advertise feature bit `08h` in byte 3 |
 
 Direct and NET read a little-endian, 32-bit pointer from **`0x08008228`** on every ARM entry. The resulting video-buffer base must be within **`0x10000000`–`0x10008000`, inclusive**. `0x08008228` is the location of the pointer, not the pixels. Invalid metadata stops the host with a red border; there is no fixed-address fallback in these current editions.
 
@@ -62,7 +63,7 @@ Copy the chosen `.mzf` to the UniCard and load it with your usual MZF loader. Th
 | `Q` / `E` | Strafe left/right |
 | `SPACE` | Fire; hold for repeated shots |
 | `F` | Use a nearby door; Direct/NET also use secret walls |
-| `M` | Toggle minimap |
+| `M` | Toggle minimap in single-player; disabled in multiplayer |
 | `P` | Start/stop the guided tour; movement takes control |
 | `L` | Toggle light cone |
 | `Z` | Toggle running |
@@ -71,9 +72,9 @@ Copy the chosen `.mzf` to the UniCard and load it with your usual MZF loader. Th
 | `B` | Direct/NET: toggle music |
 | `1` / `2` | Direct/NET: select and restart a sector |
 | `N` | Direct/NET: next sector after completing the mission |
-| `DDQD` or `IDDQD` | Direct/NET: toggle god mode |
+| `DDQD` or `IDDQD` | Direct/NET single-player: toggle god mode |
 
-In Direct and NET single-player, collect both the blue key and data core before returning to the green exit. Cheats and the guided tour are disabled during deathmatch.
+In Direct and NET single-player, collect both the blue key and data core before returning to the green exit. The minimap, god mode, cheats and the guided tour are disabled during deathmatch.
 
 ## Play NET over a local network
 
@@ -103,7 +104,7 @@ The card uses the same **TCP JSON-lines relay transport** as BomberNet's UniCard
 
 ### 3. Create and join a match
 
-1. Load the **same `unidoom_net_v0_2.mzf`** on every Sharp.
+1. Load the **same `unidoom_net_v0_3.mzf`** on every Sharp.
 2. The host presses **`H`**, then selects **`2`, `3` or `4`**, including the host.
 3. Other players press **`J`** and type the displayed four-letter room code. `BACKSPACE` corrects a letter.
 4. The lobby shows **JOINED / NEEDED**. Joiners press **`SPACE`** when ready; the host presses it last. The match waits for the exact selected count and all players to be ready.
@@ -136,8 +137,8 @@ python3 - <<'PY'
 from pathlib import Path
 from zipfile import ZipFile
 
-with ZipFile("unidoom_net_v0_2.zip") as archive:
-    data = archive.read("unidoom_net_v0_2/unifractal_v0_2.mzf")
+with ZipFile("unidoom_net_v0_3.zip") as archive:
+    data = archive.read("unidoom_net_v0_3/unifractal_v0_2.mzf")
 Path("unifractal_v0_2.mzf").write_bytes(data)
 PY
 ```
@@ -149,7 +150,7 @@ Build an edition from the repository root:
 ```bash
 make -C doom          # unidoom_v0_1.mzf
 make -C doom_direct   # unidoom_direct_v0_6.mzf
-make -C doom_net      # unidoom_net_v0_2.mzf
+make -C doom_net      # unidoom_net_v0_3.mzf
 ```
 
 Each directory also contains a standalone `tools/build.py`. Generated ARM images, Z80 binaries, symbols, manifests and memory reports are written into that edition's `build/` directory.
