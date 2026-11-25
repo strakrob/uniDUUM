@@ -1,31 +1,50 @@
-.PHONY: all verify cube verify-cube doom verify-doom doom-direct verify-doom-direct vramfinder verify-vramfinder
+.DEFAULT_GOAL := all
+.PHONY: all doom doom-direct doom-net verify verify-doom verify-doom-direct verify-doom-net verify-tcp server package clean help
+PYTHON ?= python3
 
-all:
-	python3 tools/build.py
-
-verify: all
-	python3 tools/verify.py
-
-cube:
-	python3 cube/tools/build.py
-
-verify-cube: cube
-	python3 cube/tools/verify.py
+all: doom doom-direct doom-net
 
 doom:
-	python3 doom/tools/build.py
-
-verify-doom: doom
-	python3 doom/tools/verify.py
+	$(MAKE) -C doom all
 
 doom-direct:
-	python3 doom_direct/tools/build.py
+	$(MAKE) -C doom_direct all
 
-verify-doom-direct: doom-direct
-	python3 doom_direct/tools/verify.py
+doom-net:
+	$(MAKE) -C doom_net all
 
-vramfinder:
-	python3 vramfinder/tools/build.py
+verify: verify-doom verify-doom-direct verify-doom-net
 
-verify-vramfinder: vramfinder
-	python3 vramfinder/tools/verify.py
+verify-doom:
+	$(MAKE) -C doom verify
+
+verify-doom-direct:
+	$(MAKE) -C doom_direct verify
+
+verify-doom-net:
+	$(MAKE) -C doom_net verify
+
+verify-tcp:
+	$(MAKE) -C doom_net verify-tcp
+
+server:
+	$(MAKE) -C doom_net server
+
+package:
+	$(MAKE) -C doom package
+	$(MAKE) -C doom_direct package
+	$(MAKE) -C doom_net package
+
+clean:
+	$(PYTHON) tools/clean.py
+
+help:
+	@echo 'make             Build all three Doom editions'
+	@echo 'make doom        Build Classic'
+	@echo 'make doom-direct Build Direct'
+	@echo 'make doom-net    Build NET'
+	@echo 'make verify      Run all edition emulator suites'
+	@echo 'make verify-tcp  Test the NET local server over loopback TCP'
+	@echo 'make server      Start the NET LAN server'
+	@echo 'make package     Package current verified releases'
+	@echo 'make clean       Remove build products and Python caches; keep releases/previews'

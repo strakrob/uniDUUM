@@ -1,0 +1,8 @@
+# Rebuilt by each edition's build/verification tools.
+/doom/build/
+/doom_direct/build/
+/doom_net/build/
+
+# Python interpreter caches.
+__pycache__/
+*.py[cod]

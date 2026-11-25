@@ -1,7 +1,7 @@
 UniDoom v0.1 — Mini first-person sector demo for Sharp MZ-800 + UniCard
 ====================================================================
 
-Load unidoom_v0_1.mzf with the same loader used for UniFractal/UniCube.
+Load unidoom_v0_1.mzf with your usual Sharp MZF loader.
 Explore a small sci-fi sector, shoot the security drones, collect the blue
 data core in the northeast room, then return to the green exit in the
 southwest corner. Press M for the map or P for a guided play-through.
@@ -93,30 +93,33 @@ BUILD
 
 From the workspace or package root:
   python3 doom/tools/build.py
-In the original workspace:
+From the repository root:
   make doom
 Or from the doom directory:
   make
 
 Tools: Python 3, clang with ARM target, lld, llvm-objcopy and pasmo.
-UNIDOOM_LLD may specify a linker path. Temporary tools installed for the
-earlier demos under /usr/local/tmp are recognized automatically.
+UNIDOOM_LLD may specify a linker path outside PATH.
 
 The asset generator uses only Python's standard library. It checks the
 closed map boundary, legal spawn positions and a reachable guided route.
-The original hash-checked unifractal_v0_2.mzf provides the keyboard mapping.
+The shared ../common/key_table.bin provides the 80-byte keyboard mapping.
+The original demo executable is not required.
 Output is unidoom_v0_1.mzf in the parent directory. The build subdirectory
 contains the native image/ELF/map, Z80 binary/symbols, level manifest and hashes.
+These products are ignored by Git. make clean removes them and Python
+caches; make package creates the verified source/release ZIP using the
+shared ../tools/package.py. Releases and previews are retained by clean.
 
 VERIFY
 
 Additional dependencies: Unicorn 2.1+, numpy, Pillow and libz80ex.so.1.
   python3 doom/tools/verify.py
-In the original workspace:
+From the repository root:
   make verify-doom
 
-UNIDOOM_Z80EX may specify a Z80 library path. The verifier also recognizes
-the temporary Unicorn and Z80 libraries used for the earlier demos.
+UNIDOOM_Z80EX may specify a Z80 library path. Install Python verification
+dependencies from ../requirements-dev.txt into your Python environment.
 
 Verification includes:
   - Actual assembled Z80 host and Cortex-M4 code across 60 frames
@@ -160,6 +163,7 @@ SOURCE
   doom/tools/verify.py         Z80/ARM integration checks
   doom/tools/verify_scene.py   Independent ray/game checks and previews
 
-The host transport and keyboard mapping build on NOBOMI-SOFTWARE's supplied
-unifractal_v0_2.mzf and the UniGray/UniCube work in this workspace.
+The host transport and included keyboard mapping originate from
+NOBOMI-SOFTWARE's UniFractal scaffold. The three Doom projects are
+self-contained and share only the small keyboard mapping and repo tools.
 DDA/perspective reference: https://lodev.org/cgtutor/raycasting.html

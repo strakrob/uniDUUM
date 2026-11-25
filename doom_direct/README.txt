@@ -1,9 +1,8 @@
 UniDoom Direct v0.6 — Firmware-published VGA buffer address
 ======================================================================
 
-Load unidoom_direct_v0_6.mzf with the loader used for the earlier demos.
-The earlier MZFs and source ZIPs are preserved. The current doom_direct/
-source folder builds v0.6.
+Load unidoom_direct_v0_6.mzf with your usual Sharp MZF loader.
+The doom_direct/ source folder builds v0.6.
 
 NEW FIRMWARE INTERFACE
 
@@ -124,8 +123,7 @@ The music decoder also uses ordinary Sharp RAM A000h..A7FFh for its 2 KB
 history, outside the CPU VRAM window and away from the D000h stack top.
 
 This requires the new firmware publication at 0x08008228 and the existing
-planar layout. A firmware without a valid publication fails safely; v0.5
-remains available for the old fixed-address interface.
+planar layout. A firmware without a valid publication fails safely.
 The backbuffer prevents the VGA buffer showing an intermediate clear and
 rasterization, but the final visible copy can still overlap scanout; a
 firmware-supported buffer swap/synchronization is needed for guaranteed
@@ -191,15 +189,16 @@ From the workspace/package root:
   python3 doom_direct/tools/preview_extras.py
 
 Workspace Makefile targets: make doom-direct / make verify-doom-direct.
-Inside doom_direct/: make / make verify.
+Inside doom_direct/: make / make verify / make package / make clean.
 
 Build requires Python 3, clang with ARM target, lld, llvm-objcopy, llvm-nm
-and pasmo. UNIDOOM_DIRECT_LLD can select the linker. The original hash-
-checked unifractal_v0_2.mzf supplies the keyboard table. The root
-d_e1m1.mid supplies E1M1; it is required for music generation. Asset/music/sound
+and pasmo. UNIDOOM_LLD (or UNIDOOM_DIRECT_LLD) can select the linker.
+The included ../common/key_table.bin supplies the keyboard mapping. The
+root d_e1m1.mid supplies E1M1; it is required for music generation. Asset/music/sound
 generation uses Python's standard library. Verification additionally needs
-Unicorn 2.1+, numpy, Pillow and libz80ex1; UNIDOOM_DIRECT_Z80EX can select
-the Z80 library. Existing temporary tool locations are recognized.
+Unicorn 2.1+, numpy, Pillow and libz80ex1; UNIDOOM_Z80EX (or
+UNIDOOM_DIRECT_Z80EX) can select the Z80 library. Python packages must be
+installed in your selected environment.
 
 The verifier checks the actual assembled Z80 and Cortex-M4 code:
   - 93 normal integrated frames with exact native C pixels/game-state matches
@@ -264,19 +263,16 @@ caches up to 96 shaded texture columns. Partial doors/sprites are overlaid
 with their existing depth clipping. Only UI rows need an explicit clear.
 The ray cache shares memory with the inactive navigation queue.
 
-Measured Cortex-M4 instruction counts, v0.4 -> v0.6, identical frame bytes:
-  start        5225093 -> 2544249 (51.3% fewer)
-  close_door   6657711 -> 2016899 (69.7% fewer)
-  corner       6650786 -> 2012908 (69.7% fewer)
-  long_hall    4473208 -> 2673160 (40.2% fewer)
+Measure the current renderer with:
+  python3 doom_direct/tools/profile_render.py --output doom_direct/build/profile_current.json
+These are Cortex-M4 instruction counts under Unicorn, not hardware FPS or
+cycle measurements. The profiler excludes initialization and writes the
+four sampled frame buffers into build/.
 
-These are instruction counts under Unicorn, not hardware FPS or cycle
-measurements. build/profile_before.json, profile_after.json and
-profile_comparison.json contain the evidence. Reproduce the current views:
-  python3 doom_direct/tools/profile_render.py --output doom_direct/build/profile_after.json
-The optional --build points at another version's unicard.elf/unicard.bin
-for comparisons. The profiler excludes initialization and writes decoded
-frame buffers for identity checks.
+Generated build/ products and reports are ignored by Git. make clean removes
+them and Python caches while preserving source, previews and root releases.
+The shared ../tools/package.py packages verified source with the common
+keyboard table, MIDI and tools; it excludes build products and other demos.
 
 MIDI IMPORT TOOL
 
@@ -292,5 +288,5 @@ polyphony reduction. Nine synthetic checks cover parser/timing behavior.
 A different song still needs its channel mapping and final memory fit
 verified after adjusting generate_music.py.
 
-Transport and keyboard mapping build on NOBOMI-SOFTWARE's supplied
-unifractal_v0_2.mzf and earlier UniGray/UniCube/UniDoom projects here.
+Transport and the included keyboard mapping originate from
+NOBOMI-SOFTWARE's UniFractal scaffold; the original executable is not needed.

@@ -12,7 +12,7 @@ Each MZF contains its maps, graphics and game code. No Doom WAD or external game
 | **UniDoom Direct** — [`doom_direct/`](doom_direct/) | v0.6 | Two different 32×24 sectors, eight moving drones, keys, secrets, pistol/shotgun, music and effects | ARM presents directly to the UniCard VGA buffer | [MZF](unidoom_direct_v0_6.mzf) · [Source ZIP](unidoom_direct_v0_6.zip) |
 | **UniDoom NET** — [`doom_net/`](doom_net/) | v0.3 | Direct's single-player game plus **2–4-player Ethernet deathmatch**, marine sprites, respawning and frag scores | Direct UniCard VGA output, with synchronized network inputs | [MZF](unidoom_net_v0_3.mzf) · [Source/server ZIP](unidoom_net_v0_3.zip) |
 
-Choose **Direct** for the expanded single-player game, **NET** for LAN deathmatch, or **Classic** to explore the original Sharp VRAM transfer harness. Older versioned MZFs and ZIPs remain available in the repository root.
+Choose **Direct** for the expanded single-player game, **NET** for LAN deathmatch, or **Classic** to explore the original Sharp VRAM transfer harness. The root contains one current MZF and source ZIP for each edition.
 
 ### Classic
 
@@ -130,30 +130,39 @@ Direct and NET have a pacing ceiling of approximately **16.7 FPS**, not a measur
 
 Build tools: **Python 3, clang with Cortex-M4 support, `ld.lld`, `llvm-objcopy`, `llvm-nm`, and pasmo**. The recorded builds use clang/LLVM 14. Linker checks enforce the tight ARM memory budget.
 
-All build scripts require the original **`unifractal_v0_2.mzf`** in the repository root for its hash-checked keyboard table. This input is included inside the source ZIPs. To restore it from the NET archive, run this from the repository root:
+The shared 80-byte Sharp keyboard mapping is included as
+[`common/key_table.bin`](common/key_table.bin). No UniFractal executable or
+other demo project is needed to build. Direct and NET use the included root
+**`d_e1m1.mid`** to generate their E1M1 PSG arrangement.
+
+From the repository root:
 
 ```bash
-python3 - <<'PY'
-from pathlib import Path
-from zipfile import ZipFile
-
-with ZipFile("unidoom_net_v0_3.zip") as archive:
-    data = archive.read("unidoom_net_v0_3/unifractal_v0_2.mzf")
-Path("unifractal_v0_2.mzf").write_bytes(data)
-PY
+make                 # build all three editions
+make doom            # Classic only
+make doom-direct     # Direct only
+make doom-net        # NET only
+make help            # list available targets
 ```
 
-Direct and NET additionally require the included root **`d_e1m1.mid`** to generate their E1M1 PSG arrangement.
+The equivalent per-edition commands remain `make -C doom`,
+`make -C doom_direct`, and `make -C doom_net`. `PYTHON` can select a Python
+interpreter. Set `UNIDOOM_LLD` if the linker is outside `PATH`.
 
-Build an edition from the repository root:
+Generated ARM images, objects, Z80 binaries, symbols, manifests and reports
+live in each edition's ignored `build/` directory. Source and previews remain
+in the three edition directories; shared cleanup and packaging tools are in
+[`tools/`](tools/).
 
 ```bash
-make -C doom          # unidoom_v0_1.mzf
-make -C doom_direct   # unidoom_direct_v0_6.mzf
-make -C doom_net      # unidoom_net_v0_3.mzf
+make package         # recreate the three ZIPs after successful verification
+make clean           # remove build directories and Python caches
 ```
 
-Each directory also contains a standalone `tools/build.py`. Generated ARM images, Z80 binaries, symbols, manifests and memory reports are written into that edition's `build/` directory.
+Cleanup preserves source, previews, the MIDI, and the three current MZFs and
+ZIPs. Source ZIPs include the selected edition, the shared keyboard mapping
+and repository tools; generated build products and unrelated demos are
+excluded. From an extracted archive, use `make -C <edition>`.
 
 ## Verification
 
@@ -161,19 +170,20 @@ Additional test dependencies are **libz80ex** and the Python packages in [`requi
 
 ```bash
 python3 -m pip install -r requirements-dev.txt
-make -C doom verify
-make -C doom_direct verify
-make -C doom_net verify
-make -C doom_net verify-tcp
+make verify          # all three emulator suites
+make verify-tcp      # NET loopback TCP and standalone-server tests
 ```
 
 The suites execute assembled Z80 and Cortex-M4 code, compare pixels/state with native C, and check collision, doors, gameplay, memory guards and transport failures. Direct/NET also verify music and sound, both maps and firmware video-pointer handling. NET checks exact 2/3/4-player matches, marine upload/drone restoration, short and sustained stalls, and a separately launched server with real loopback TCP clients.
 
-Existing verification results are stored in each `build/` directory. These are CPU/protocol and local TCP tests; physical mk3b operation, electrical timing and hardware frame rates still require verification. Screenshots and GIFs come from emulation or the native renderer, with approximate RGBI colours.
+Running verification writes results into each ignored `build/` directory.
+Set `UNIDOOM_Z80EX` to the shared library path if libz80ex is outside the
+system library search path. Run both verification targets before packaging
+NET; `make package` rejects missing or stale evidence. These are CPU/protocol and local TCP tests; physical mk3b operation, electrical timing and hardware frame rates still require verification. Screenshots and GIFs come from emulation or the native renderer, with approximate RGBI colours.
 
 ## Credits and further documentation
 
-- The OpenCPU harness and keyboard mapping build on **NOBOMI-SOFTWARE's UniFractal** scaffold.
+- The OpenCPU harness and included keyboard mapping originate from **NOBOMI-SOFTWARE's UniFractal** scaffold; the original demo is not a build dependency.
 - [BomberNet](https://github.com/MZPico/BomberNet) and [MZPico firmware](https://github.com/MZPico/MZPico-firmware) document the shared UniCard-compatible NET interface. This project's relay and transport implementation are independent; BomberNet game code and assets are not included.
 - [`d_e1m1.mid`](d_e1m1.mid) supplies **E1M1 / At Doom's Gate** for the two-voice-plus-percussion PSG arrangement in Direct/NET. Maps and pixel artwork are generated by the included tools.
 - Edition manuals: [Classic](doom/README.txt), [Direct](doom_direct/README.txt), [NET](doom_net/README.txt).

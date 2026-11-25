@@ -12,12 +12,9 @@ from pathlib import Path
 import shutil
 import struct
 import subprocess
-import sys
 
 ROOT=Path(__file__).resolve().parent.parent
 os.chdir(ROOT)
-if Path('/usr/local/tmp/unifractal-python').exists():
-    sys.path.insert(0,'/usr/local/tmp/unifractal-python')
 import numpy as np
 from PIL import Image
 from unicorn import Uc, UC_ARCH_ARM, UC_MODE_THUMB, UC_MODE_MCLASS, UC_HOOK_MEM_WRITE, UC_HOOK_MEM_READ
@@ -173,12 +170,10 @@ class ARM:
                            'sha256':hashlib.sha256(frame).hexdigest()})
         return frame
 
-libname=os.environ.get('UNIDOOM_DIRECT_Z80EX','libz80ex.so.1')
-fallback=Path('/usr/local/tmp/unigray-tools/root/usr/lib/x86_64-linux-gnu/libz80ex.so.1')
+libname=os.environ.get('UNIDOOM_NET_Z80EX') or os.environ.get('UNIDOOM_DIRECT_Z80EX') or os.environ.get('UNIDOOM_Z80EX','libz80ex.so.1')
 try: z=ct.CDLL(libname)
-except OSError:
-    if not fallback.exists(): raise SystemExit('Install libz80ex1 or set UNIDOOM_DIRECT_Z80EX')
-    z=ct.CDLL(str(fallback))
+except OSError as exc:
+    raise SystemExit('Install libz80ex1 or set UNIDOOM_Z80EX to its shared library') from exc
 MR=ct.CFUNCTYPE(ct.c_uint8,ct.c_void_p,ct.c_uint16,ct.c_int,ct.c_void_p)
 MW=ct.CFUNCTYPE(None,ct.c_void_p,ct.c_uint16,ct.c_uint8,ct.c_void_p)
 PR=ct.CFUNCTYPE(ct.c_uint8,ct.c_void_p,ct.c_uint16,ct.c_void_p)

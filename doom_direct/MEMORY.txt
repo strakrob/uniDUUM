@@ -97,17 +97,10 @@ bases use byte copies. There is no old fixed-address fallback. Sharp VRAM
 is bypassed. The final copy can overlap VGA scanout; firmware support is needed
 for guaranteed tear-free swapping. Other CCM remains firmware-owned.
 
-Measured Cortex-M4 instructions, v0.4 -> v0.6, same reference frame bytes:
-  start        5225093 -> 2544249 (51.3% fewer)
-  close_door   6657711 -> 2016899 (69.7% fewer)
-  corner       6650786 -> 2012908 (69.7% fewer)
-  long_hall    4473208 -> 2673160 (40.2% fewer)
+The host pacing ceiling is three 50 Hz ticks per frame, about 16.7 FPS.
+Simulation advances per rendered frame; this is not a measured hardware FPS.
+Run tools/profile_render.py after building for current instruction counts.
 
-These instruction counts do not directly predict hardware FPS. The host
-pacing ceiling is now three 50 Hz ticks per frame, about 16.7 FPS instead
-of 12.5. Simulation remains per rendered frame, so the higher ceiling also
-advances movement/gameplay faster when hardware meets that cadence.
-
-Evidence: build/memory.json, verification.json and profile_comparison.json.
-The MZF is 203 bytes smaller than v0.4 despite retaining the full track.
-Further large additions still need careful loader and ARM allocation work.
+Build/verification generates build/memory.json and verification.json.
+These generated reports are ignored by Git and removed by make clean.
+Further additions must respect the loader and ARM allocation limits above.

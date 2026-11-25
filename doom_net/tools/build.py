@@ -30,8 +30,7 @@ def find(name, *fallbacks):
     raise SystemExit(f'Missing build tool: {name}')
 def run(*args): subprocess.run(args,check=True)
 clang=find('clang')
-lld=os.environ.get('UNIDOOM_DIRECT_LLD') or find('ld.lld', '/usr/bin/ld.lld-14',
-    '/usr/local/tmp/unigray-tools/root/usr/lib/llvm-14/bin/ld.lld')
+lld=os.environ.get('UNIDOOM_NET_LLD') or os.environ.get('UNIDOOM_DIRECT_LLD') or os.environ.get('UNIDOOM_LLD') or find('ld.lld', '/usr/bin/ld.lld-14')
 objcopy=find('llvm-objcopy', '/usr/bin/llvm-objcopy-14')
 flags=['--target=arm-none-eabi','-mcpu=cortex-m4','-mthumb',
        '-mfpu=fpv4-sp-d16','-mfloat-abi=hard','-Oz','-ffreestanding',
@@ -42,10 +41,11 @@ run(clang,*flags,'-c','src/unicard_header.S','-o','build/unicard_header.o')
 run(lld,'-T','src/unicard.ld','-Map=build/unicard.map','-o','build/unicard.elf',
     'build/unicard_header.o','build/raycaster.o')
 run(objcopy,'-O','binary','build/unicard.elf','build/unicard.bin')
-original=(ROOT.parent/'unifractal_v0_2.mzf').read_bytes()
-assert hashlib.sha256(original).hexdigest()=='2b1a31fcc5a37ed93ccf59aadb9ffd5c569f76df5a0267e90974edc097a9682c'
-# Relocated Z80 key table 0933h..0982h, including arrow/key control codes.
-(ROOT/'build/key_table.bin').write_bytes(original[0x933-0x80:0x983-0x80])
+# Shared Sharp keyboard mapping; no original demo image is needed.
+key_table=(ROOT.parent/'common/key_table.bin').read_bytes()
+assert len(key_table)==80
+assert hashlib.sha256(key_table).hexdigest()=='9f49c16609b647548d0b89a093331e86eda7d9a9a2cbe13202f27fd93fbd1e51'
+(ROOT/'build/key_table.bin').write_bytes(key_table)
 # Resolve the existing art storage; skins are uploaded by the Z80 at room start.
 nm=find('llvm-nm','/usr/bin/llvm-nm-14')
 arm_rows=[line.split() for line in subprocess.check_output([nm,'-n','build/unicard.elf'],text=True).splitlines()]

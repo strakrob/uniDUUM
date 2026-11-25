@@ -180,7 +180,9 @@ SOURCES AND REFERENCES
 
 Independent transport/relay implementation from the public protocol and
 card API, with credit to MZPico/BomberNet. No BomberNet game code or assets
-are included. The existing user-supplied d_e1m1.mid supplies the PSG music.
+are included. The existing user-supplied d_e1m1.mid supplies the PSG music. The included
+common keyboard table originates from NOBOMI-SOFTWARE's UniFractal scaffold;
+the original demo is not a build dependency.
 
   https://github.com/MZPico/BomberNet/blob/2948cd900cf15cfd3103b70724056f2fb4e04028/docs/net-protocol.md
   https://github.com/MZPico/BomberNet/blob/2948cd900cf15cfd3103b70724056f2fb4e04028/c/common/netdev_card.c
@@ -195,11 +197,14 @@ From doom_net:
   make verify-tcp      actual loopback TCP listener test
   make server          local LAN server (default TCP 8766)
   make package         ZIP, after successful current build and verification
+  make clean           remove generated build files and Python caches
 
 Needs clang for Cortex-M4, ld.lld, llvm-objcopy/llvm-nm and pasmo.
 Python test dependencies are in ../requirements-dev.txt; libz80ex is also
-needed. Existing /usr/local/tmp tool fallbacks are supported by the scripts.
-Build inputs include ../unifractal_v0_2.mzf and ../d_e1m1.mid.
+needed. Shared build inputs are ../common/key_table.bin and ../d_e1m1.mid.
+UNIDOOM_LLD selects a linker outside PATH; UNIDOOM_Z80EX selects a Z80
+shared library outside the system search path. Install Python test packages
+in the selected environment; no machine-specific tool directories are used.
 The verified toolchain uses clang/LLVM 14; the linker enforces the tight
 SRAM limit if a different compiler produces a larger binary.
 
@@ -221,3 +226,11 @@ coexistence with OpenCPU and gameplay across physical mk3b cards still need
 hardware verification. If the NET-required screen appears on firmware that
 already runs BomberNet, provide its version or the mk3b NET command header;
 that will identify any firmware API difference.
+
+DIRECTORY AND PACKAGE HYGIENE
+
+build/ contains generated compiler outputs and verification reports and is
+ignored by Git. make clean removes build/ and Python caches; it preserves
+source, previews and the root MZF/ZIP releases. Source packages use the
+shared ../tools/package.py and include common/key_table.bin, the MIDI and
+shared repository tools. Build products and other demos are excluded.

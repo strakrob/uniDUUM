@@ -1,19 +1,26 @@
-.PHONY: all verify verify-tcp server package
+.PHONY: all verify verify-tcp server package clean
+PYTHON ?= python3
+
 all:
-	python3 tools/build.py
+	$(PYTHON) tools/build.py
+
 verify: all
-	python3 tools/test_lzss.py
-	python3 tools/test_import_midi.py
-	python3 tools/verify.py
-	python3 tools/test_deathmatch.py
-	python3 tools/test_players.py
-	python3 tools/test_network.py
+	$(PYTHON) tools/test_lzss.py
+	$(PYTHON) tools/test_import_midi.py
+	$(PYTHON) tools/verify.py
+	$(PYTHON) tools/test_deathmatch.py
+	$(PYTHON) tools/test_players.py
+	$(PYTHON) tools/test_network.py
+
 verify-tcp:
-	python3 tools/test_relay_tcp.py
-	python3 tools/test_server.py
+	$(PYTHON) tools/test_relay_tcp.py
+	$(PYTHON) tools/test_server.py
 
 server:
-	python3 server.py
+	$(PYTHON) server.py
 
 package:
-	python3 tools/package.py
+	$(PYTHON) ../tools/package.py doom_net
+
+clean:
+	$(PYTHON) ../tools/clean.py doom_net

@@ -69,12 +69,14 @@ backbuffer. The destination can move between frames, including unaligned
 valid addresses. All non-video CCM and firmware flash remain untouched.
 
 The renderer still uses the packed 32-column cache and avoids opaque-wall
-overdraw. Actual instruction profiles for this build are recorded in
-build/profile_net.json. They do not directly predict hardware FPS.
+overdraw. Run tools/profile_render.py after building to generate current
+instruction profiles; they do not directly predict hardware FPS.
 Host pacing remains three 50 Hz ticks, up to 16.7 FPS. While waiting for
 network input it polls at 50 Hz without redrawing or advancing simulation;
 the warning is drawn once after 800 ms. Network buffers remain in the
 Sharp image and the existing 24-byte ARM header.
 
 See build/build.json, memory.json, verification.json,
-network_verification.json and deathmatch_verification.json for evidence.
+network_verification.json and deathmatch_verification.json after running
+the corresponding build/verification tools. Generated build/ products are
+ignored by Git and removed by make clean.

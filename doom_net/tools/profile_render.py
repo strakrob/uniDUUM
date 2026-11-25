@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Count actual Cortex-M4 instructions for fixed views; no hardware FPS claim."""
-import argparse,json,struct,subprocess,sys,shutil
+import argparse,json,struct,subprocess,shutil
 from pathlib import Path
-if Path('/usr/local/tmp/unifractal-python').exists():sys.path.insert(0,'/usr/local/tmp/unifractal-python')
 from unicorn import Uc,UC_ARCH_ARM,UC_MODE_THUMB,UC_MODE_MCLASS,UC_HOOK_BLOCK
 from unicorn.arm_const import UC_CPU_ARM_CORTEX_M4,UC_ARM_REG_SP,UC_ARM_REG_LR,UC_ARM_REG_C1_C0_2,UC_ARM_REG_FPEXC
 p=argparse.ArgumentParser();p.add_argument('--build',type=Path,default=Path(__file__).resolve().parent.parent/'build');p.add_argument('--output',type=Path);p.add_argument('--video-address',type=lambda s:int(s,0),default=0x10001f80);a=p.parse_args()
